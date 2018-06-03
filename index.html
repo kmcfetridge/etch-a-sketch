@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ETCH-A-SKETCH</title>
+	<style type="text/css">
+		body {
+			margin: 0px;
+			padding: 0px;
+		}
+		div {
+			margin: 0px;
+			padding: 0px;
+		}
+		.quad {
+			height: 5px;
+			width: 5px;
+			background-color: white;
+			display: inline-block;
+			border: 1px solid lightgray;
+			box-sizing: border-box;
+		}
+	</style>
+</head>
+<body>
+	<div id="gridBody" style="width: 500px; height: 500px; font-size: 0px;"</div>
+	<script type="text/javascript">
+		let grid = document.querySelector('#gridBody');
+		for(let i = 0;i<10000;i++) {
+			let divElement = document.createElement('div');
+			divElement.className = "quad";
+			grid.append(divElement);
+		}
+	</script>
+</body>
+</html>
