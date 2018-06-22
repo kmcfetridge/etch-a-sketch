@@ -7,13 +7,15 @@ function clearGrid() {
 }
 /* colors grid based on mouse event */
 function colorQuad(e) {
-	if(isHover || isMouseDown || e.type === 'mousedown') {
+	console.log(e);
+	if(isHover || (!isHover && e.type === 'mousedown') || (!isHover && isMouseDown)) {
 		e.target.style.backgroundColor = hexColorValue;
 	}
 }
 /* sets mousedown flag */
 function mouseType(e) {
 	(e.type === 'mousedown') ? isMouseDown = true : isMouseDown = false;
+	(e.type === 'dragend') ? isMouseDown = false : isMouseDown = isMouseDown;
 }
 /* adds css hover effect to sizeInput when size button has hover */
 function sizeHoverStyleHelper(e) {
