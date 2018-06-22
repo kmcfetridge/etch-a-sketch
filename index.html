@@ -2,34 +2,50 @@
 <html>
 <head>
 	<title>ETCH-A-SKETCH</title>
-	<style type="text/css">
-		body {
-			margin: 0px;
-			padding: 0px;
-		}
-		div {
-			margin: 0px;
-			padding: 0px;
-		}
-		.quad {
-			height: 5px;
-			width: 5px;
-			background-color: white;
-			display: inline-block;
-			border: 1px solid lightgray;
-			box-sizing: border-box;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<script type="text/javascript" src="scripts/etch.js"></script>
 </head>
 <body>
-	<div id="gridBody" style="width: 500px; height: 500px; font-size: 0px;"</div>
+	<header class="colorScheme"><h1>ETCH-A-SKETCH</h1></header>
+	<div id="gridBody">
+		<button id="reset" class="colorScheme leftColumn">Reset</button>
+		<div id="gridSizeInput" class="leftColumn">
+			<input id="sizeValue" class="negColorScheme" type="text" maxlength="3"><input id="size" class="colorScheme" type="button" value="Size">
+		</div>
+		<input id="colorPicker" class="negColorScheme" type="color" value="#000000">
+		<div id="mouseInput" class="colorScheme leftColumn">
+			<div id="">
+				<input id="hover" type="radio" name="effect" checked value="hover"> Hover
+			</div>
+			<div>
+				<input id="clicked" type="radio" name="effect" value="clicked"> Click
+			</div>
+		</div>
+	</div>
 	<script type="text/javascript">
-		let grid = document.querySelector('#gridBody');
-		for(let i = 0;i<10000;i++) {
-			let divElement = document.createElement('div');
-			divElement.className = "quad";
-			grid.append(divElement);
-		}
+		const grid = document.querySelector('#gridBody');
+		const resetGrid = document.querySelector('#reset');
+		const squareSize = document.querySelector('#size');
+		const sizeInput = document.querySelector('#sizeValue');
+		const colorInput = document.querySelector('#colorPicker');
+		const hoverRadio = document.querySelector('#hover');
+		const clickRadio = document.querySelector('#clicked');
+		let hexColorValue = colorInput.value;
+		let gridSize = 16;
+		let isHover = hoverRadio.checked;
+		let isMouseDown = false;
+
+		document.body.addEventListener('mousedown', mouseType);
+		document.body.addEventListener('mouseup', mouseType);
+		squareSize.addEventListener('mouseover', sizeHoverStyleHelper);
+		squareSize.addEventListener('mouseout', sizeHoverStyleHelper);
+		hoverRadio.addEventListener('click', drawType);
+		clickRadio.addEventListener('click', drawType);
+		colorInput.addEventListener('change', getColor);
+		squareSize.addEventListener('click', buildNewGrid);
+		resetGrid.addEventListener('click', clearGrid);
+
+		buildGrid(gridSize);
 	</script>
 </body>
 </html>

@@ -1,0 +1,121 @@
+@media print {
+	body {
+		-webkit-print-color-adjust: exact;
+	}
+}
+		
+body {
+	margin: 0px;
+	padding: 0px;
+	background: lightgray;
+}
+
+h1 {
+	margin: 0;
+	padding: 25px;
+	font-family: cursive;
+}
+
+div {
+	margin: 0px;
+	padding: 0px;
+}
+
+.quad {
+	background-color: white;
+	display: inline-block;
+	box-sizing: border-box;
+}
+
+.colorScheme {
+	background-color: red;
+	color: gold;
+	text-shadow: 1px 1px silver;
+}
+
+.negColorScheme, button:hover, input[type="button"]:hover {
+	background-color: gold;
+	color: red;
+	text-shadow: -1px -1px silver;
+}
+
+.leftColumn {
+	position: absolute; 
+	left: -100px;
+}
+
+#gridBody {
+	width: 600px;
+	height: 600px;
+	font-size: 0px;
+	margin: 0px auto;
+	position: relative;
+	cursor: crosshair;
+	top: 25px;
+}
+
+#gridSizeInput {
+	top: 40px;
+	font-size: 0;
+	box-sizing: border-box;
+	height: 30px;
+}
+
+#colorPicker {
+	position: absolute;
+	left: 625px;
+	width: 75px;
+	text-align: center;
+	height: 30px;
+	padding: 0px;
+	border: none;
+}
+
+#mouseInput {
+	top: 80px;
+	font-size: 16px;
+	width: 70px;
+	padding: 5px 0 5px 5px;
+	text-align: left;
+	cursor: pointer;
+}
+
+header {
+	margin: 0px auto;
+	text-align: center;
+	padding: 0;
+}
+
+button {
+  	border: none;
+  	display: inline-block;
+  	cursor: pointer;
+  	height: 30px;
+  	width: 75px;
+  	font-size: 16px;
+  	font-weight: bold;
+}
+
+button:focus, input[type="text"]:focus, input[type="button"]:focus, #colorPicker {
+	outline: none; 
+}
+
+input[type="text"] {
+	padding: 0 50px 0 5px;
+    width: 19px;
+    height: 31px;
+    border: none;
+    text-decoration: none;
+}
+
+input[type="button"] {
+	padding: 0;
+    margin-left: -45px;
+    height: 31px;
+    width: 45px;
+    border: none;
+	border: none;
+	text-decoration: none;
+	cursor: pointer;
+	font-weight: bold;
+}

@@ -1,0 +1,184 @@
+<script src="/scripts/tlistCustomization.js"></script>
+<script src="/scripts/cas/underscore-min.js"></script>
+<div style="display: none;" id="crossleacontainer">
+    <table>
+    <tbody class="tbody">
+        <tr>
+    	    <td class="bold">Disable Cross LEA (Section Override)?</td>
+    	    <td>
+    	        <select name="[SECTIONS.S_NC_CROSSLEASECTIONS]CROSSLEA_DISABLED" id="crossleadisabled">
+                    <option value="">Yes
+                    <option value="N">No
+                </select>
+    	    </td>
+        </tr>
+        <tr id="exceptionlist">
+            <td class="bold">Except the following schools:</td>
+            <td>
+                <div class="button-row">
+                    <button style="float:right;" id="addSectionException">Add</button>
+                </div>
+                <table class="tlistCollectionTable linkDescList" style="width: 100%">
+                	<colgroup>
+                		<col class="col-SCHOOL_NUMBER">
+                		<col class="col-PSUSER">
+                		<col class="col-delete">
+                	</colgroup>
+                	<thead>
+                		<tr>
+                			<th>School</th>
+                			<th>Last Modified By</th>
+                			<th>Delete</th>
+                		</tr>
+                	</thead>
+                	<tbody>
+                	    ~[tlist_sql;
+                	    select
+                            ~(rn) dcid
+                        ,   id
+                	    ,   school_number
+                        ,   case when whomodified is null then whocreated else whomodified end psuser
+                        from s_nc_crossleasections_exc
+                        where sectionsdcid = ~(rn)
+                        order by id]
+                		<tr>
+                		    <!--~(dcid)~(id)~(school_number)~(psuser)-->
+                            <td><input type="text" class="SCHOOL_NUMBER" data-name="CF-[SECTIONS:~(dcid).S_NC_CROSSLEASECTIONS_EXC.S_NC_CROSSLEASECTIONS_EXC:~(id)]SCHOOL_NUMBER" value="~(school_number)"></td>
+                            <td><input type="text" class="PSUSER" data-name="CF-[SECTIONS:~(dcid).S_NC_CROSSLEASECTIONS_EXC.S_NC_CROSSLEASECTIONS_EXC:~(id)]PSUSER" value="~(psuser)" readonly></td>
+                            <td><input type="checkbox" name="DC-SECTIONS:~(dcid).S_NC_CROSSLEASECTIONS_EXC.S_NC_CROSSLEASECTIONS_EXC:~(id)" class="deleteCB hide ng-scope"></td>
+                        </tr>
+                        [/tlist_sql]
+                        <tr id="newRow" style="display:none;">
+                            <td><input type="text" class="SCHOOL_NUMBER" data-name="CF-[SECTIONS:~(rn).S_NC_CROSSLEASECTIONS_EXC.S_NC_CROSSLEASECTIONS_EXC:-{INSERT_COUNTER}]SCHOOL_NUMBER" value=""></td>
+                            <td><input type="text" class="PSUSER" data-name="CF-[SECTIONS:~(rn).S_NC_CROSSLEASECTIONS_EXC.S_NC_CROSSLEASECTIONS_EXC:-{INSERT_COUNTER}]PSUSER" value="" readonly></td>
+                            <td class="deleteCol"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    function tlistText2DropDown_CROSSLEAEXC(fieldName, ddRows){
+        var localddRows=ddRows;
+        var fqTD="table > tbody > tr ."+fieldName;
+        $j(fqTD).each(function(x,TDHTML){
+            var tdElement = $j(TDHTML).parent();
+            var input = tdElement.find("input");
+            input.remove();
+            var inputName;
+            var inputValue;
+            var inputClass;
+            var inputdataName;
+            var inputdataClass;
+            inputName = input.attr("name");
+            inputValue = input.attr("value");
+            inputClass = input.attr("class");
+            if(inputName ==null) {
+                inputdataName= input.attr("data-name");
+                inputdataClass= input.attr("data-addclass");
+            }
+            var selectHtml;
+            if(inputName !=null) {
+                selectHtml = '<select name="' + inputName + '" class="' + inputClass + '" >';
+            } else {
+                selectHtml = '<select data-name="' + inputdataName + '" data-addclass="' + inputdataClass + '" > ';
+            }
+            $j.each(ddRows, function(key, lea) {
+                var optgrouphtml, optionhtml;
+                optgrouphtml = '<optgroup label="' + key + '">';
+                selectHtml += optgrouphtml;
+                for(var school in lea) {
+                    var school_number = inputValue.replace(',','');
+                    if(lea[school].school_number === Number(school_number)) {
+                        optionhtml = '<option value="' + lea[school].school_number + '" selected="selected">' + lea[school].school_name +'</option> ';
+                    }
+                    else {
+                        optionhtml = '<option value="' + lea[school].school_number + '">' + lea[school].school_name +'</option> ';
+                    }
+                    selectHtml += optionhtml;
+                }
+                selectHtml += '</optgroup>';
+            });
+            selectHtml += '</select> ';
+            tdElement.append(selectHtml);
+        });
+    }
+
+    var cross_lea_exceptions = {
+        schools: [],
+        rowCount: 0,
+        addRow: function(el) {
+            cross_lea_exceptions.rowCount++;
+
+            function mutateAttributes(content) {
+                function insertCounter(attr) {
+                    attr = attr.replace('{INSERT_COUNTER}', cross_lea_exceptions.rowCount);
+                    return attr;
+                }
+
+                content = $j(content);
+                content.attr('id','');
+                content.show();
+                var inputs = content.find('input, select');
+                $j.each(inputs, function(idx, input) {
+                    input = $j(input);
+                    input.attr('name', insertCounter(input.attr('data-name')));
+                    input.removeAttr('data-name');
+                });
+            }
+            el = $j(el);
+            var newRowTemplate = el.parents('td').find('table tr#newRow').clone(),
+                exceptionsTable = el.parents('td').find('table').eq(0);
+            if(newRowTemplate) {
+                mutateAttributes(newRowTemplate);
+                exceptionsTable.find('tbody').append(newRowTemplate);
+            }
+        },
+        setWhoModified: function() {
+            $j('input.PSUSER').each(function() {
+                $j(this).val("~[x:username]");
+            });
+        }
+    };
+    ~[tlist_sql;
+        select cas_cross_lea.get_all_schools from dual]
+        cross_lea_exceptions.schools = ~(output);
+    [/tlist_sql]
+    cross_lea_exceptions.schools = _.groupBy(cross_lea_exceptions.schools, 'lea_name');
+    tlistText2DropDown_CROSSLEAEXC('SCHOOL_NUMBER',cross_lea_exceptions.schools);
+    tlistText2StaticText('PSUSER');
+
+
+    $j(document).ready(function() {
+        var roomRow = $j('td:contains("Room")').parents('tr'),
+            crossleaContainer = $j('#crossleacontainer .tbody').detach();
+        roomRow.after(crossleaContainer.html());
+
+        var form = $j('form');
+        $j('#crossleadisabled').change(function() {
+            if($j(this).val() === '') {
+                $j('#exceptionlist').show();
+                form.attr('onsubmit', '; cross_lea_exceptions.setWhoModified()');
+                $j('#exceptiontlist .deleteCB').each(function() {
+                    $j(this).val('off').attr('checked',false);
+                });
+            }
+            else {
+                $j('#exceptionlist').hide();
+                $j('#exceptiontlist .deleteCB').each(function() {
+                    $j(this).val('on').attr('checked',true);
+                });
+            }
+        });
+
+        $j('#addSectionException').click(function(el) {
+            el.preventDefault();
+            cross_lea_exceptions.addRow(el.currentTarget);
+        });
+        $j('#crossleadisabled').trigger('change');
+    });
+
+</script>
