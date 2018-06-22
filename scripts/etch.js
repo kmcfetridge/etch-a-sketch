@@ -55,7 +55,7 @@ function buildGrid(num) {
 		divElement.style.width = divSize + 'px';
 		divElement.addEventListener('mouseover', colorQuad);
 		divElement.addEventListener('mousedown', colorQuad);
-		grid.append(divElement);
+		grid.appendChild(divElement);
 	}
 }
 /* builds a new grid with new size */
