@@ -2,7 +2,7 @@
 function clearGrid() {
 	let quadElements = document.getElementsByClassName('quad');
 	for(let i = 0;i<quadElements.length;i++) {
-		quadElements[i].style.backgroundColor = 'white';
+		quadElements[i].style.backgroundColor = 'lightgray';
 	}
 }
 /* colors grid based on mouse event */

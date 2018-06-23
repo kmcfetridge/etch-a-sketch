@@ -7,7 +7,7 @@
 body {
 	margin: 0px;
 	padding: 0px;
-	background: lightgray;
+	background: cornflowerblue;
 }
 
 h1 {
@@ -22,7 +22,7 @@ div {
 }
 
 .quad {
-	background-color: white;
+	background-color: lightgray;
 	display: inline-block;
 	box-sizing: border-box;
 	-webkit-user-select: none; /* Safari 3.1+ */
