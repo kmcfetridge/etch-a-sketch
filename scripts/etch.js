@@ -7,7 +7,6 @@ function clearGrid() {
 }
 /* colors grid based on mouse event */
 function colorQuad(e) {
-	console.log(e);
 	if(isHover || (!isHover && e.type === 'mousedown') || (!isHover && isMouseDown)) {
 		e.target.style.backgroundColor = hexColorValue;
 	}
@@ -53,6 +52,7 @@ function buildGrid(num) {
 	for(let i = 0;i<totalDivs;i++) {
 		let divElement = document.createElement('div');
 		divElement.className = "quad";
+		divElement.setAttribute('draggable', false);
 		divElement.style.height = divSize + 'px';
 		divElement.style.width = divSize + 'px';
 		divElement.addEventListener('mouseover', colorQuad);
